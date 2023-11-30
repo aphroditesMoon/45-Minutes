@@ -4,39 +4,68 @@ using UnityEngine;
 
 public class PlatformMoving : MonoBehaviour
 {
+    private Transform targetTransform; // Sadece bu scriptin etkileyeceği child objenin transform'u
     private Vector3 startPosition;
+    private bool isDragging = false;
+    private Vector2 offset;
+    public float moveRange = 1.0f; // Hareket aralığı
 
-    Vector2 difference = Vector2.zero;
+    void Start()
+    {
+        // Target objeyi parent içindeki sırasına göre al
+        targetTransform = transform.parent.GetChild(0); // 0, hedef child objenin sıra indeksi olabilir, uygun indeksi belirtin
+    }
 
     private void OnMouseDown()
     {
-        difference = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition) - (Vector2)transform.position;
+        if (!isDragging)
+        {
+            startPosition = targetTransform.position;
+            offset = (Vector2)targetTransform.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            isDragging = true;
+        }
     }
 
     private void OnMouseDrag()
     {
-        Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        if (transform.CompareTag("SlideableX"))
+        if (isDragging)
         {
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             mousePosition.z = 0f;
 
-            Vector3 newPosition = new Vector3(mousePosition.x, transform.position.y, transform.position.z);
+            if (transform.CompareTag("SlideableX"))
+            {
+                float clampedX = Mathf.Clamp(mousePosition.x + offset.x, startPosition.x - moveRange, startPosition.x + moveRange);
+                targetTransform.position = new Vector3(clampedX, startPosition.y, startPosition.z);
+            }
 
-            newPosition.x = Mathf.Clamp(newPosition.x, -1, 1);
+            if (transform.CompareTag("SlideableY"))
+            {
+                float clampedY = Mathf.Clamp(mousePosition.y + offset.y, startPosition.y - moveRange, startPosition.y + moveRange);
+                targetTransform.position = new Vector3(startPosition.x, clampedY, startPosition.z);
+            }
+        }
+    }
 
-            transform.position = newPosition;
+    private void OnMouseUp()
+    {
+        isDragging = false;
+        ResetLimits();
+    }
+
+    private void ResetLimits()
+    {
+        // Mouse bırakıldığında sınırları sıfırla
+        if (transform.CompareTag("SlideableX"))
+        {
+            float clampedX = Mathf.Clamp(targetTransform.position.x, -moveRange, moveRange);
+            targetTransform.position = new Vector3(clampedX, startPosition.y, startPosition.z);
         }
 
         if (transform.CompareTag("SlideableY"))
         {
-            mousePosition.z = 0f;
-
-            Vector3 newPosition = new Vector3(transform.position.x, mousePosition.y, transform.position.z);
-
-            newPosition.y = Mathf.Clamp(newPosition.y, transform.position.y - newPosition.y, transform.position.y + newPosition.y);
-
-            transform.position = newPosition;
+            float clampedY = Mathf.Clamp(targetTransform.position.y, -moveRange, moveRange);
+            targetTransform.position = new Vector3(startPosition.x, clampedY, startPosition.z);
         }
     }
 }
