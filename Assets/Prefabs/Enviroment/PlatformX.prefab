@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d400e766446655c4c9cf46fc923e4259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveRange: 1
 --- !u!61 &5677900118280378945
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -335,7 +336,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2698627033577740950}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
