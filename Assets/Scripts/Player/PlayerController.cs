@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour
         {
             _time += Time.deltaTime;
             GatherInput();
+
+            _animator.SetFloat("YVelocity", _rb.velocity.y);
         }
 
         private void GatherInput()
@@ -58,7 +60,8 @@ public class PlayerController : MonoBehaviour
             {
                 _jumpToConsume = true;
                 _timeJumpWasPressed = _time;
-            }
+                _animator.SetBool("Jumping", true);
+        }
         }
 
         private void FixedUpdate()
@@ -97,6 +100,7 @@ public class PlayerController : MonoBehaviour
                 _bufferedJumpUsable = true;
                 _endedJumpEarly = false;
                 GroundedChanged?.Invoke(true, Mathf.Abs(_frameVelocity.y));
+                _animator.SetBool("Jumping", false);
             }
             // Left the Ground
             else if (_grounded && !groundHit)
@@ -157,7 +161,17 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+                var runSpeed = _stats.MaxSpeed + 2;
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * runSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+                    _animator.SetBool("Running", true);
+                }
+                else
+                {
+                    _frameVelocity.x = Mathf.MoveTowards(_frameVelocity.x, _frameInput.Move.x * _stats.MaxSpeed, _stats.Acceleration * Time.fixedDeltaTime);
+                    _animator.SetBool("Running", false);
+            }
             }
         }
 
