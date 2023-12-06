@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2698627033171831279}
   - component: {fileID: 2698627033171831278}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -384,7 +384,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2698627033863576366}
   - component: {fileID: 2698627033863576337}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SliderArea
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -469,7 +469,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2698627034182131528}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: PlatformY
   m_TagString: SlideableY
   m_Icon: {fileID: 0}
@@ -503,7 +503,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2698627034451359635}
   - component: {fileID: 2698627034451359634}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: 0
   m_TagString: Untagged
   m_Icon: {fileID: 0}

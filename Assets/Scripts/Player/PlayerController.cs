@@ -7,12 +7,20 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
         [SerializeField] private PlayerScritable _stats;
+        [SerializeField] private LedgeDetection LedgeDetection;
         private Rigidbody2D _rb;
         private CapsuleCollider2D _col;
         private FrameInput _frameInput;
         private Vector2 _frameVelocity;
         private bool _cachedQueryStartInColliders;
         private Animator _animator;
+
+        [SerializeField] private Vector2 offset0;
+        [SerializeField] private Vector2 offset1;
+        private Vector2 _beforeClimbPosition;
+        private Vector2 _afterClimbPosition;
+        private bool _canGrabLedge = true;
+        private bool _canClimb;
 
         #region Interface
 
@@ -39,6 +47,7 @@ public class PlayerController : MonoBehaviour
             GatherInput();
 
             _animator.SetFloat("YVelocity", _rb.velocity.y);
+            _animator.SetBool("canLedgeClimb", _canClimb);
         }
 
         private void GatherInput()
@@ -74,6 +83,7 @@ public class PlayerController : MonoBehaviour
             
             ApplyMovement();
             FlipSprite();
+            LedgeClimb();
         }
 
         #region Collisions
@@ -220,6 +230,31 @@ public class PlayerController : MonoBehaviour
             gameObject.transform.localScale = currentScale;
 
             facingRight = !facingRight;
+        }
+        
+        private void LedgeClimb()
+        {
+            if (LedgeDetection.ledgeDetect && _canGrabLedge)
+            {
+                _canGrabLedge = false;
+
+                Vector2 ledgePosition = LedgeDetection.transform.position;
+
+                _beforeClimbPosition = ledgePosition + offset0;
+                _afterClimbPosition = ledgePosition + offset1;
+
+                _canClimb = true;
+            }
+
+            if (_canClimb)
+                transform.position = _beforeClimbPosition;
+        }
+
+        private void LedgeClimbOver()
+        {
+            _canClimb = false;
+            _canGrabLedge = true;
+            transform.position = _afterClimbPosition;
         }
         
 #if UNITY_EDITOR
