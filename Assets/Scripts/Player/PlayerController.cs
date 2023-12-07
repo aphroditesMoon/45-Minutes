@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Collider2D))]
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerController : MonoBehaviour
 {
         [SerializeField] private PlayerScritable _stats;
@@ -37,7 +37,7 @@ public class PlayerController : MonoBehaviour
             _rb = GetComponent<Rigidbody2D>();
             _col = GetComponent<CapsuleCollider2D>();
             _animator = GetComponent<Animator>();
-
+            
             _cachedQueryStartInColliders = Physics2D.queriesStartInColliders;
         }
 
@@ -95,14 +95,10 @@ public class PlayerController : MonoBehaviour
         {
             Physics2D.queriesStartInColliders = false;
 
-            // Ground and Ceiling
-            bool groundHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.down, _stats.GrounderDistance, ~_stats.PlayerLayer);
-            bool ceilingHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.up, _stats.GrounderDistance, ~_stats.PlayerLayer);
-
-            // Hit a Ceiling
-            if (ceilingHit) _frameVelocity.y = Mathf.Min(0, _frameVelocity.y);
-
-            // Landed on the Ground
+            
+            bool groundHit = Physics2D.CapsuleCast(_col.bounds.center, _col.size, _col.direction, 0, Vector2.down,
+                _stats.GrounderDistance, ~_stats.PlayerLayer);
+            
             if (!_grounded && groundHit)
             {
                 _grounded = true;
@@ -112,7 +108,6 @@ public class PlayerController : MonoBehaviour
                 GroundedChanged?.Invoke(true, Mathf.Abs(_frameVelocity.y));
                 _animator.SetBool("Jumping", false);
             }
-            // Left the Ground
             else if (_grounded && !groundHit)
             {
                 _grounded = false;

@@ -16,7 +16,7 @@ public class LedgeDetection : MonoBehaviour
         if (_canDetectable)
             ledgeDetect = Physics2D.OverlapCircle(transform.position, radius, mask);
 
-        Debug.Log(ledgeDetect);
+        //Debug.Log(ledgeDetect);
     }
 
     private void OnTriggerEnter2D(Collider2D other)
