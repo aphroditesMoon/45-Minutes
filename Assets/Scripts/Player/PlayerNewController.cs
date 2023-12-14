@@ -102,20 +102,21 @@ public class PlayerNewController : MonoBehaviour
         if (_horizontalInput < 0f && !_facingRight)
         {
             Flip();
+            offset0 = new Vector2(0.2f, -2);
+            offset1 = new Vector2(-0.4f, -0.071f);
         }
         if (_horizontalInput > 0f && _facingRight)
         {
             Flip();
+            offset0 = new Vector2(-0.2f, -2);
+            offset1 = new Vector2(0.4f, 0.071f);
         }
     }
-    
+
     private void Flip()
     {
-        Vector3 currentScale = gameObject.transform.localScale;
-        currentScale.x *= -1;
-        transform.localScale = currentScale;
-
         _facingRight = !_facingRight;
+        transform.Rotate(0, 180, 0);
     }
     
     private void LedgeClimb()
