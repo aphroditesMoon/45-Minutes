@@ -181,7 +181,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 1.5
   m_Material: {fileID: 6200000, guid: 38f6dac15accb264e8d935803df5bc00, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   runningSpeed: 10
-  jumpForce: 5
+  jumpForce: 7
   groundCheck: {fileID: 3360393506434742701}
   groundLayer:
     serializedVersion: 2
@@ -236,6 +236,9 @@ MonoBehaviour:
   ledgeDetection: {fileID: 7349977435835720500}
   offset0: {x: -0.157, y: -1.301}
   offset1: {x: 0.36, y: -0.029}
+  layer:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &8106664689763243559
 GameObject:
   m_ObjectHideFlags: 0

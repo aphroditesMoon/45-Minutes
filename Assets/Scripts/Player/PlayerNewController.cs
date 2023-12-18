@@ -45,20 +45,24 @@ public class PlayerNewController : MonoBehaviour
     
     private Rigidbody2D _rigidbody2D;
     private Animator _animator;
-    private CapsuleCollider2D _capsuleCollider2D;
+    
+    private bool _automatGround;
+    public LayerMask layer;
 
     private void Start()
     {
         _rigidbody2D = GetComponent<Rigidbody2D>();
         _animator = GetComponent<Animator>();
-        _capsuleCollider2D = GetComponent<CapsuleCollider2D>();
     }
     
     private void Update()
     {
-        Move();
+        if (!_canClimb)
+        {
+            Move();
+            FlipSprite();
+        }
         Jump();
-        FlipSprite();
         LedgeClimb();
         
         _animator.SetFloat("YVelocity", _rigidbody2D.velocity.y);
@@ -72,6 +76,12 @@ public class PlayerNewController : MonoBehaviour
             _animator.SetBool("Jumping", false);
             _animator.SetBool("Landing", true);
         }
+
+        if (_automatGround && !_groundHit && Mathf.Abs(_rigidbody2D.velocity.y) < 0.05f)
+        {
+            _animator.SetBool("Jumping", false);
+            _animator.SetBool("Landing", true);
+        }
     }
 
     private void Move()
@@ -81,12 +91,13 @@ public class PlayerNewController : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftShift))  _rigidbody2D.velocity = new Vector2(_horizontalInput * runningSpeed, _rigidbody2D.velocity.y);
         else _rigidbody2D.velocity = new Vector2(_horizontalInput * speed, _rigidbody2D.velocity.y);
     }
-
+    
     private void Jump()
     {
         _isGrounded = Physics2D.OverlapCircle(groundCheck.position, 0.01f, groundLayer);
+        _automatGround = Physics2D.OverlapCircle(groundCheck.position, 0.01f, layer);
         
-        if (_isGrounded && Input.GetButtonDown("Jump"))
+        if ((_isGrounded || _automatGround) && Input.GetButtonDown("Jump"))
         {
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, jumpForce);
             _animator.SetBool("Jumping", true);
@@ -148,5 +159,21 @@ public class PlayerNewController : MonoBehaviour
     {
         await Task.Delay(100);
         _canGrabLedge = true;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Automat")
+        {
+            jumpForce = 8;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.gameObject.tag == "Automat")
+        {
+            jumpForce = 7;
+        }
     }
 }
