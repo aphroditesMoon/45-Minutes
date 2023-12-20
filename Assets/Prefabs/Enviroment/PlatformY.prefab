@@ -301,6 +301,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d400e766446655c4c9cf46fc923e4259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  targetTransform: {fileID: 2698627033577740953}
   moveRange: 1
 --- !u!61 &5677900118280378945
 BoxCollider2D:

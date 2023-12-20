@@ -238,7 +238,7 @@ MonoBehaviour:
   offset1: {x: 0.36, y: -0.029}
   layer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
 --- !u!1 &8106664689763243559
 GameObject:
   m_ObjectHideFlags: 0
