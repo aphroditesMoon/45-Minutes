@@ -301,7 +301,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d400e766446655c4c9cf46fc923e4259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetTransform: {fileID: 2698627033577740953}
   moveRange: 1
 --- !u!61 &5677900118280378945
 BoxCollider2D:
@@ -374,7 +373,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 6
+  m_Constraints: 5
 --- !u!1 &2698627033863576367
 GameObject:
   m_ObjectHideFlags: 0

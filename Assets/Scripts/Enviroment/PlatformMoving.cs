@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class PlatformMoving : MonoBehaviour
@@ -8,64 +9,83 @@ public class PlatformMoving : MonoBehaviour
     private Transform targetTransform;
     private Vector3 startPosition;
     private bool isDragging = false;
-    private Vector2 offset;
+    private bool canMoveX = false;
+    private bool canMoveY = false;
     public float moveRange = 1.0f;
+    public CinemachineVirtualCamera virtualCamera;
+    public Camera mainCamera; // Normal kamera referansı
 
     void Start()
     {
         targetTransform = transform.parent.GetChild(0);
-    }
+        startPosition = targetTransform.position;
 
-    private void OnMouseDown()
-    {
-        if (!isDragging)
-        {
-            startPosition = targetTransform.position;
-            offset = (Vector2)targetTransform.position - (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            isDragging = true;
-        }
-    }
-
-    private void OnMouseDrag()
-    {
-        if (isDragging)
-        {
-            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            mousePosition.z = 0f;
-
-            if (transform.CompareTag("SlideableX"))
-            {
-                // Calculate the new X position within the range of -1 to 1 relative to the parent's position
-                float clampedX = Mathf.Clamp(mousePosition.x + offset.x, targetTransform.parent.position.x - moveRange, targetTransform.parent.position.x + moveRange);
-                targetTransform.position = new Vector3(clampedX, startPosition.y, startPosition.z);
-            }
-
-            if (transform.CompareTag("SlideableY"))
-            {
-                float clampedY = Mathf.Clamp(mousePosition.y + offset.y, targetTransform.parent.position.y - moveRange, targetTransform.parent.position.y + moveRange);
-                targetTransform.position = new Vector3(startPosition.x, clampedY, startPosition.z);
-            }
-        }
-    }   
-
-    private void OnMouseUp()
-    {
-        isDragging = false;
-        ResetLimits();
-    }
-
-    private void ResetLimits()
-    {
+        // Tag'e göre hareket yeteneğini belirle
         if (transform.CompareTag("SlideableX"))
         {
-            float clampedX = Mathf.Clamp(targetTransform.position.x, targetTransform.parent.position.x - moveRange, targetTransform.parent.position.x + moveRange);
-            targetTransform.position = new Vector3(clampedX, startPosition.y, startPosition.z);
+            canMoveX = true;
+        }
+        else if (transform.CompareTag("SlideableY"))
+        {
+            canMoveY = true;
         }
 
-        if (transform.CompareTag("SlideableY"))
+        // Cinemachine Virtual Camera referansını otomatik olarak al
+        virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();
+
+        // Eğer normal kamera kullanılıyorsa, referansını al
+        mainCamera = GameObject.FindObjectOfType<Camera>();
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0))
         {
-            float clampedY = Mathf.Clamp(targetTransform.position.y, targetTransform.parent.position.y - moveRange, targetTransform.parent.position.y + moveRange);
-            targetTransform.position = new Vector3(startPosition.x, clampedY, startPosition.z);
+            Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0f;
+
+            if (IsMouseOverTarget(mousePosition))
+            {
+                isDragging = true;
+            }
         }
+        else if (isDragging && Input.GetMouseButton(0))
+        {
+            Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+            mousePosition.z = 0f;
+
+            Vector3 clampedPosition = targetTransform.position;
+
+            if (canMoveX)
+            {
+                clampedPosition.x = Mathf.Clamp(mousePosition.x, startPosition.x - moveRange, startPosition.x + moveRange);
+            }
+            else if (canMoveY)
+            {
+                clampedPosition.y = Mathf.Clamp(mousePosition.y, startPosition.y - moveRange, startPosition.y + moveRange);
+            }
+
+            targetTransform.position = clampedPosition;
+            UpdateVirtualCameraPosition(clampedPosition); // Kamera pozisyonunu güncelle
+        }
+        else if (isDragging && Input.GetMouseButtonUp(0))
+        {
+            isDragging = false;
+        }
+    }
+
+    private void UpdateVirtualCameraPosition(Vector3 position)
+    {
+        // Eğer Cinemachine Virtual Camera kullanılıyorsa, kamera pozisyonunu güncelle
+        if (virtualCamera != null)
+        {
+            virtualCamera.transform.position = new Vector3(position.x, position.y, virtualCamera.transform.position.z);
+        }
+    }
+
+    private bool IsMouseOverTarget(Vector3 mousePosition)
+    {
+        Collider2D collider = targetTransform.GetComponent<Collider2D>();
+        return collider.bounds.Contains(mousePosition);
     }
 }
