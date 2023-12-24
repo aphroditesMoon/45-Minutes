@@ -88,4 +88,14 @@ public class PlatformMoving : MonoBehaviour
         Collider2D collider = targetTransform.GetComponent<Collider2D>();
         return collider.bounds.Contains(mousePosition);
     }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        other.transform.SetParent(transform);
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        other.transform.SetParent(null);
+    }
 }

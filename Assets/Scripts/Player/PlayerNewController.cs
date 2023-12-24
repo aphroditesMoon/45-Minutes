@@ -67,6 +67,8 @@ public class PlayerNewController : MonoBehaviour
         
         _animator.SetFloat("YVelocity", _rigidbody2D.velocity.y);
         _animator.SetBool("canLedgeClimb", _canClimb);
+
+        Debug.Log(_horizontalInput);
     }
 
     private void FixedUpdate()
@@ -87,9 +89,10 @@ public class PlayerNewController : MonoBehaviour
     private void Move()
     {
         _horizontalInput = Input.GetAxis("Horizontal");
-        
-        if (Input.GetKey(KeyCode.LeftShift))  _rigidbody2D.velocity = new Vector2(_horizontalInput * runningSpeed, _rigidbody2D.velocity.y);
-        else _rigidbody2D.velocity = new Vector2(_horizontalInput * speed, _rigidbody2D.velocity.y);
+    
+        float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runningSpeed : speed;
+    
+        _rigidbody2D.velocity = new Vector2(_horizontalInput * moveSpeed, _rigidbody2D.velocity.y);
     }
     
     private void Jump()
