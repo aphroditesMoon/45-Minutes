@@ -2,12 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Dialogue : MonoBehaviour
 {
     public TextMeshProUGUI textComponent;
     public string[] lines;
     public float textSpeed;
+    [SerializeField] public Image porter;
+    [SerializeField] public Image[] porters;
 
     private int index;
     
@@ -55,6 +58,7 @@ public class Dialogue : MonoBehaviour
         {
             index++;
             textComponent.text = string.Empty;
+            porter.sprite = porter.sprite == porters[0].sprite ? porters[1].sprite : porters[0].sprite;
             StartCoroutine(Typeline());
         }
         else
