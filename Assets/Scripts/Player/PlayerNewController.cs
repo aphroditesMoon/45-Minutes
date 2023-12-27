@@ -67,8 +67,6 @@ public class PlayerNewController : MonoBehaviour
         
         _animator.SetFloat("YVelocity", _rigidbody2D.velocity.y);
         _animator.SetBool("canLedgeClimb", _canClimb);
-
-        Debug.Log(_horizontalInput);
     }
 
     private void FixedUpdate()
@@ -164,11 +162,18 @@ public class PlayerNewController : MonoBehaviour
         _canGrabLedge = true;
     }
 
+    public Checkpoint checkpoint;
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Automat")
         {
             jumpForce = 8;
+        }
+
+        if (other.tag == "Death")
+        {
+            transform.position = checkpoint._lastPosition;
         }
     }
 
