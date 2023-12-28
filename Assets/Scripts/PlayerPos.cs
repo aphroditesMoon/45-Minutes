@@ -2,21 +2,23 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class Checkpoint : MonoBehaviour
+public class PlayerPos : MonoBehaviour
 {
     private CheckPointManager _checkPointManager;
 
     private void Start()
     {
         _checkPointManager = GameObject.FindGameObjectWithTag("CheckPointManager").GetComponent<CheckPointManager>();
+        transform.position = _checkPointManager.lastCheckPointPos;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        if (other.tag == "Death")
         {
-            _checkPointManager.lastCheckPointPos = transform.position;
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

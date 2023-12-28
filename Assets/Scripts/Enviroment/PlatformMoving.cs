@@ -39,6 +39,8 @@ public class PlatformMoving : MonoBehaviour
 
     void Update()
     {
+        GameObject.Find("LedgeDetection").transform.SetParent(GameObject.Find("Player").transform);
+        
         if (Input.GetMouseButtonDown(0))
         {
             Vector3 mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);

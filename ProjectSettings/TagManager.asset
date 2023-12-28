@@ -10,6 +10,7 @@ TagManager:
   - Automat
   - Checkpoint
   - Death
+  - CheckPointManager
   layers:
   - Default
   - TransparentFX

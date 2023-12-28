@@ -162,18 +162,11 @@ public class PlayerNewController : MonoBehaviour
         _canGrabLedge = true;
     }
 
-    public Checkpoint checkpoint;
-
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Automat")
         {
             jumpForce = 8;
-        }
-
-        if (other.tag == "Death")
-        {
-            transform.position = checkpoint._lastPosition;
         }
     }
 
