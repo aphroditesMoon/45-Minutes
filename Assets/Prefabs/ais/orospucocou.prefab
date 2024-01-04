@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 2522835075173756622}
   - component: {fileID: 2966111480400694424}
   - component: {fileID: 1549935830107381964}
+  - component: {fileID: 542510327007255834}
   m_Layer: 5
   m_Name: DialogueButton
   m_TagString: Untagged
@@ -463,4 +464,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2966111480400694424}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 542510327007255834}
+        m_TargetAssemblyTypeName: DialogueTrigger, Assembly-CSharp
+        m_MethodName: StartDialogue
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &542510327007255834
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8650180738075250876}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a42f290c74a7117498c5ba8083bbedf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  endScreen: {fileID: 0}
+  dialogueObject:
+  - {fileID: 0}
+  - {fileID: 0}

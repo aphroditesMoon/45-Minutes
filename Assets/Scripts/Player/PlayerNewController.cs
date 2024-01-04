@@ -88,9 +88,9 @@ public class PlayerNewController : MonoBehaviour
     {
         _horizontalInput = Input.GetAxis("Horizontal");
     
-        float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runningSpeed : speed;
+        //float moveSpeed = Input.GetKey(KeyCode.LeftShift) ? runningSpeed : speed;
     
-        _rigidbody2D.velocity = new Vector2(_horizontalInput * moveSpeed, _rigidbody2D.velocity.y);
+        _rigidbody2D.velocity = new Vector2(_horizontalInput * speed, _rigidbody2D.velocity.y);
     }
     
     private void Jump()
